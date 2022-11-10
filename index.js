@@ -21,8 +21,11 @@ const client = new MongoClient(uri, {
 const jwtVerify = (req, res, next) => {};
 
 app.post("/jwt", (req, res) => {
-    const authHeader = req.headers;
-    console.log(authHeader);
+    const user = req.body;
+    const token = jwt.sign(user, process.env.SECRET_ACCESS_TOKEN, {
+        expiresIn: "2h",
+    });
+    res.send({ token });
 });
 
 async function run() {
@@ -50,6 +53,17 @@ async function run() {
             const query = { _id: ObjectId(id) };
             const menu = await menuCollection.findOne(query);
             res.send(menu);
+        });
+        // post api
+        app.post("/add-menu", async (req, res) => {
+            const menu = req.body;
+            const ratings = 0;
+            const result = await menuCollection.insertOne({
+                ...menu,
+                ratings: ratings,
+            });
+
+            res.send(result);
         });
     } finally {
     }
