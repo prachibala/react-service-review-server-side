@@ -25,6 +25,35 @@ app.post("/jwt", (req, res) => {
     console.log(authHeader);
 });
 
+async function run() {
+    try {
+        const menuCollection = client.db("snackbox").collection("menus");
+
+        app.get("/top-rated-menus", async (req, res) => {
+            const query = {};
+            const cursor = menuCollection
+                .find(query)
+                .sort({ ratings: -1 })
+                .limit(3);
+            const menus = await cursor.toArray();
+            res.send(menus);
+        });
+
+        app.get("/menus", async (req, res) => {
+            const query = {};
+            const cursor = menuCollection.find(query);
+            const menus = await cursor.toArray();
+            res.send(menus);
+        });
+        app.get("/menus/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const menu = await menuCollection.findOne(query);
+            res.send(menu);
+        });
+    } finally {
+    }
+}
 run().catch((error) => {
     console.error(error);
 });
