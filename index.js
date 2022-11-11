@@ -79,6 +79,7 @@ async function run() {
                 ratings: ratings,
                 ratingsCount: [0, 0, 0, 0, 0],
                 totalRatingsCount: 0,
+                createdAt: new Date(),
             });
 
             res.send(result);
