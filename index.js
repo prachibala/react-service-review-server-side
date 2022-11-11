@@ -58,9 +58,19 @@ async function run() {
             res.send(menus);
         });
 
+        app.get("/recently-added-menus", async (req, res) => {
+            const query = {};
+            const cursor = menuCollection
+                .find(query)
+                .sort({ createdAt: -1 })
+                .limit(3);
+            const menus = await cursor.toArray();
+            res.send(menus);
+        });
+
         app.get("/menus", async (req, res) => {
             const query = {};
-            const cursor = menuCollection.find(query);
+            const cursor = menuCollection.find(query).sort({ createdAt: -1 });
             const menus = await cursor.toArray();
             res.send(menus);
         });
