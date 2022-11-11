@@ -56,6 +56,7 @@ async function run() {
                 .limit(3);
             const menus = await cursor.toArray();
             res.send(menus);
+            // console.log(menus)
         });
 
         app.get("/recently-added-menus", async (req, res) => {
